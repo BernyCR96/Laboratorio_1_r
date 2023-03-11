@@ -1,0 +1,111 @@
+---
+title: "Laboratorio_1_r"
+output: html_notebook
+---
+UNIVERSIDAD DE SAN CARLOS DE GUATEMALA
+FACULTAD DE INGENIERIA
+ESCUELA DE ESTUDIOS DE POSTGRADO
+
+Laboratorio 1
+Berny Andreé Cardona Ramos
+
+1.1 Cree un vector por cada estudiante que almacene los 5 registros
+
+```{r}
+student_1 <- c(50.4,62.3,92.1,77.6,TRUE)
+student_2 <- c(41.7,87.9,75.3,72.4,FALSE)
+student_3 <- c(30.3,67.8,69.3,71.2,FALSE)
+student_4 <- c(65.4,85.1,92.3,96.8,TRUE)
+student_5 <- c(70.4,88.2,95.2,90.7,TRUE)
+```
+1.2 ree el vector students_vector, sus elementos serán cada uno de los vectores creados
+anteriormente
+
+```{r}
+students_vector <- c(student_1,student_2,student_3,student_4,student_5)
+```
+
+1.3 Construya una matriz de nombre students_matrix que reciba como parámetro
+students_vector
+
+```{r}
+students_matrix <- matrix(students_vector, nrow = 5, byrow = TRUE)
+
+```
+2.1 Cree los vectores name_students y name_courses_legal_age con los siguientes valores:
+
+```{r}
+name_students <- c("Lily Brown", "Davis Moore", "Susan Taylor", "Mike Jones","Tom Hill")
+name_courses_legal_age <- c("TIC", "Accounting", "Psychology", "Ethics","Legal_age")
+
+colnames(students_matrix) <- name_courses_legal_age
+rownames(students_matrix) <- name_students
+```
+
+3. rowSums, cbind
+
+```{r}
+total_grade_student <- rowSums(students_matrix[,1:4])
+
+#add column total_grade_student
+result_students <- cbind(students_matrix,total_grade_student)
+```
+
+4.1 select values
+
+```{r}
+selected_elements <- result_students[c(1,3,5),c(2,4)]
+```
+
+5.1 construya un data frame de nombre students_grades_df utilizando la matriz
+result_students como parámetro
+
+```{r}
+students_grades_df <- data.frame(result_students)
+
+#5.2 filter: Accounting > 80 and Legal_age = TRUE
+subset(students_grades_df, subset = Accounting > 80 & Legal_age == TRUE)
+```
+
+6.1 loop through result_students matrix
+
+```{r}
+students_projection <- function(){
+  for (i in 1:nrow(result_students[,1:4])) {
+    for (j in 1:ncol(result_students[,1:4])) {
+      if(result_students[i,j] <= 45){
+        print(paste("Student at risk ",result_students[i,j]))
+      }
+      else if(result_students[i,j] > 45 & result_students[i,j] < 61){
+        print(paste("Student may be approved ",result_students[i,j]))
+      }
+      else{
+        print(paste("Student approved ",result_students[i,j]))
+      }
+    }
+  }
+}
+
+students_projection()
+```
+
+7. Data frames and use lapply
+
+```{r}
+#7.1 create function index_education
+index_education <- function(grade){
+  index <- ((1+(grade/100))/2)
+  return(index)
+}
+
+all_students_grade <- students_grades_df[,1:4]
+lapply(all_students_grade, index_education)
+
+```
+
+8. Math utilities
+```{r}
+
+score_mean <- colMeans(students_grades_df[,1:4])
+```
+
